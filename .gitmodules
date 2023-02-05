@@ -1,0 +1,3 @@
+[submodule "clusters/k3s-cluster-on-oracle-cloud-infrastructure"]
+	path = clusters/k3s-cluster-on-oracle-cloud-infrastructure
+	url = https://github.com/ngeorger/k3s-cluster-on-oracle-cloud-infrastructure.git
