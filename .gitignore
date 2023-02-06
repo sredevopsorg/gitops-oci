@@ -120,3 +120,4 @@ terraform.rc
 **/.history/
 *.envrc
 **/.terraform.lock**
+**/.terraform/
