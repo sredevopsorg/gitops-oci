@@ -36,3 +36,4 @@ module "compute" {
 
   cidr_blocks = local.cidr_blocks
 }
+
