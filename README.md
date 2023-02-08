@@ -1,10 +1,10 @@
 # NOT NO BE USED YET
 
-This setup is based on the following blog post: 
+[![tfsec](https://github.com/sredevopsdev/gitops-oci/actions/workflows/tfsec.yml/badge.svg)](https://github.com/sredevopsdev/gitops-oci/actions/workflows/tfsec.yml)
 
 ## Requirements
 
-The following tools must be installed and available in the path for this project to work properly:
+The following tools must be installed and available in the path for this project to work properly. Note: direnv is meant to be used only in local environment.
 
 ## Terraform
 
