@@ -119,5 +119,9 @@ terraform.rc
 **/*.tfstate.backup
 **/.history/
 *.envrc
+*.envrc64
 **/.terraform.lock**
 **/.terraform/
+!clusters/oci/terraform.tfstate
+!clusters/oci/terraform.tfstate.backup
+!clusters/oci/oci-free.tfplan

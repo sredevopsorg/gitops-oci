@@ -1,33 +1,33 @@
 variable "github_owner" {
   type        = string
-  description = "github owner"
+  description = "The GitHub organization or user account that owns the repository."
 }
 
 variable "github_token" {
   type        = string
-  description = "github token"
+  description = "The GitHub personal access token that has write access to the repository."
 }
 
 variable "repository_name" {
   type        = string
-  default     = "test-provider"
-  description = "github repository name"
+  description = "The name of the repository to create."
 }
 
 variable "repository_visibility" {
   type        = string
-  default     = "public"
-  description = "How visible is the github repo"
+  description = "The visibility of the repository to create."
+  default     = "private"
 }
 
 variable "branch" {
   type        = string
+  description = "The branch to use for the repository."
   default     = "main"
-  description = "branch name"
 }
 
 variable "target_path" {
   type        = string
-  default     = ""
-  description = "flux sync target path"
+  description = "The path to the directory where Flux manifests will be installed."
+  default     = "flux-system"
 }
+
