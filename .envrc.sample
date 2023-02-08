@@ -1,11 +1,17 @@
-# OCI
-export TF_VAR_compartment_id="<COMPARTMENT_ID>"
-export TF_VAR_region="<REGION_NAME>"
-export TF_VAR_tenancy_ocid="<TENANCY_OICD>"
-export TF_VAR_user_ocid="<USER_OICD>"
-export TF_VAR_fingerprint="<RSA_FINGERPRINT>"
-export TF_VAR_private_key="<PRIVATE_KEY>"
-export TF_VAR_ssh_authorized_keys='["<SSH_PUBLIC_KEY>"]'
+export TF_VAR_tenancy_ocid=""
+export TF_VAR_user_ocid=""
+export TF_VAR_fingerprint=""
+export TF_VAR_private_key=""
+export TF_VAR_private_key_path=""
+export TF_VAR_ssh_authorized_keys=""
+export TF_VAR_ssh_public_key=""
+export TF_VAR_image_ocid=""
+export TF_VAR_ssh_private_key_path=""
+export TF_VAR_ssh_private_key=""
 
-# Terraform Cloud
-export TF_WORKSPACE=your_workspace
+export TF_VAR_region=""	
+export TF_VAR_tenancy_ocid=""	
+export TF_VAR_compartment_ocid=""	
+export TF_VAR_current_user_ocid=""	
+export TF_VAR_region=""	
+export TF_VAR_tenancy_ocid=""

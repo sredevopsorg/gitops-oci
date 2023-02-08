@@ -16,7 +16,7 @@ variable "repository_name" {
 
 variable "repository_visibility" {
   type        = string
-  default     = "private"
+  default     = "public"
   description = "How visible is the github repo"
 }
 
@@ -28,6 +28,6 @@ variable "branch" {
 
 variable "target_path" {
   type        = string
-  default     = "staging-cluster"
+  default     = ""
   description = "flux sync target path"
 }

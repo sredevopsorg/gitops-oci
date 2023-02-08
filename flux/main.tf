@@ -45,8 +45,8 @@ locals {
 }
 
 resource "tls_private_key" "main" {
-  algorithm   = "ECDSA"
-  ecdsa_curve = "P256"
+  algorithm = "RSA"
+  rsa_bits  = 2048
 }
 
 # Flux
