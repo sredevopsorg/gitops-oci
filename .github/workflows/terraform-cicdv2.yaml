@@ -73,16 +73,16 @@ jobs:
           fetch-depth: 0
         id: checkout
 
-      - name: dump files
-        id: dump_files
-        run: |
-          ech
+      # - name: dump files
+      #   id: dump_files
+      #   run: |
+      #     ech
 
       - name: setup tf
         id: setup_terraform
         uses: hashicorp/setup-terraform@v2
         # with:
-        #   terraform_version: 1.0.4
+        #   terraform_version:
 
 
       # THis step ios optional and is safe to fail, you can use to check the format of your files.
