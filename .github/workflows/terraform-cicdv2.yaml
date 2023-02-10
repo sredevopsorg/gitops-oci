@@ -26,19 +26,26 @@ on:
 
 env:
   # Variables for global usage
-  TF_VAR_environment: oci # Ambiente de ejecucion exclusivo para Terraform
   environment: oci # Ambiente de ejecución
-  TF_VAR_oci_tenancy_ocid: ${{ secrets.OCI_TENANCY_OCID }}
-  TF_VAR_oci_user_ocid: ${{ secrets.OCI_USER_OCID }}
-  TF_VAR_oci_fingerprint: ${{ secrets.OCI_FINGERPRINT }}
-  TF_VAR_oci_private_key_path: ${{ github.workspace }}/private.key
-  TF_VAR_oci_region: ${{ secrets.OCI_REGION }}
-  TF_VAR_oci_compartment_ocid: ${{ secrets.OCI_COMPARTMENT_OCID }}
-  TF_VAR_oci_ssh_public_key: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
-  TF_VAR_oci_ssh_private_key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
-  TF_VAR_oci_ssh_private_key_path: ${{ github.workspace }}/private-ssh.key
+  TF_VAR_environment: oci # Ambiente de ejecucion exclusivo para Terraform
+  TF_VAR_compartment_id: ${{ secrets.OCI_COMPARTMENT_OCID }}
+  TF_VAR_user_ocid: ${{ secrets.OCI_USER_OCID }}
+  TF_VAR_fingerprint: ${{ secrets.OCI_FINGERPRINT }}
+  TF_VAR_private_key_path: ${{ github.workspace }}/clusters/oci/oci_private_key.pem
+  TF_VAR_ssh_authorized_keys: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
+  TF_VAR_region: ${{ secrets.OCI_REGION }}
+  TF_VAR_tenancy_ocid: ${{ secrets.OCI_TENANCY_OCID }}
+  TF_VAR_private_key: ${{ secrets.OCI_PRIVATE_KEY }}
   
 
+# variable "ssh_public_key" {} 
+# variable "image_ocid" {}
+# variable "ssh_private_key_path" {}
+# variable "ssh_private_key" {}
+# variable "cluster_token" {}
+# variable "compartment_ocid" {}
+# variable "current_user_ocid" {}
+# variable "private_key" {}
 
 
 
@@ -50,6 +57,8 @@ jobs:
     permissions:
       contents: write
       id-token: write
+      pull-requests: write
+
 
     defaults:
       run:
@@ -63,31 +72,10 @@ jobs:
           fetch-depth: 0
         id: checkout
 
-      # We need this action only if we our own terraform modules within CencosudX,
-      # or we have to authenticate against our repositories.
-
-      # - uses: webfactory/ssh-agent@v0.7.0
-      #   with:
-      #     ssh-private-key: ${{ secrets.TF_MODULES_COMMON_DEPLOY_KEY }} # Base64 Private SSH Key
-      #   id: ssh-agent
-
-      # Authentication with Google, exported to all steps
-      # - name: 'auth google'
-      #   id: 'auth'
-      #   uses: 'google-github-actions/auth@v0'
-      #   with:
-      #     credentials_json: '${{ secrets.TERRAFORM_GCP_CREDENTIALS }}' # Base64 JSON encoded service account with according poermissions.
-      # we stored env vars in a base64 encoded secret in github, so we can decode and dump it to $GITHUB_ENV, sso we use it in the next steps.
-
-
-      - name: dump secrets into github env from secret encoded Base64
-        id: dump
-        env:
-          FILE_ENVRC: '${{ secrets.FILE_ENVRC }}'
+      - name: dump files
+        id: dump_files
         run: |
-            echo "$FILE_ENVRC" | base64 -d > .envrc
-            cat .envrc >> $GITHUB_ENV
-
+          ech
 
       - name: setup tf
         id: setup_terraform
