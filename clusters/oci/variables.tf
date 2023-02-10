@@ -1,7 +1,7 @@
 variable "compartment_id" {}
 variable "user_ocid" {}
 variable "fingerprint" {}
-variable "private_key_path" {}
+variable "private_key" {}
 variable "ssh_authorized_keys" {}
 variable "region" {}
 variable "tenancy_ocid" {}
