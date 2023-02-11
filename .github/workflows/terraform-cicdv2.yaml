@@ -105,7 +105,12 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=./clusters/oci plan -input=false -out=./oci.tfplan
+        env:
+          TF_LOG: DEBUG
+        # Refresh the state before running the plan, to avoid errors.
+        run: |
+            terraform -chdir=./clusters/oci refresh -input=false && terraform -chdir=./clusters/oci plan -input=false -out=tfplan || \
+              terraform -chdir=./clusters/oci plan -input=false -out=./oci.tfplan
         # continue-on-error: false
 
       # Now, only when we tag a commit, starting with "infra-v**", the apply command is triggered.
@@ -115,7 +120,7 @@ jobs:
         env:
           APPLY: ${{ github.event.inputs.apply }}
         if: env.APPLY == 'true'
-        run:  terraform -chdir=./clusters/oci apply -auto-approve ./oci.tfplan
+        run:  terraform -chdir=./clusters/oci apply -auto-approve tfplan
 
 # Save tfstate to github
       - name: Save tfstate to github
