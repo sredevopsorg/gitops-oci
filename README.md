@@ -1,12 +1,16 @@
 [![terraform-cluster-oci](https://github.com/sredevopsdev/gitops-oci/actions/workflows/terraform-cicdv2.yaml/badge.svg)](https://github.com/sredevopsdev/gitops-oci/actions/workflows/terraform-cicdv2.yaml)
 
-# Testers required! 
+# Testers wanted!
 
-## Requirements
+You'll need an [Oracle CLoud Account - Always Free Tier](https://www.oracle.com/cl/cloud/free/)
 
-The following tools must be installed and available in the path for this project to work properly:
+## Requirements (local execution)
 
-## Terraform
+
+The following tools must be installed., and available in the path for this project to work properly:
+
+<details>
+<summary>Terraform</summary>
 
 ### macOS
 
@@ -23,8 +27,10 @@ unzip terraform_0.12.24_linux_amd64.zip
 sudo mv terraform /usr/local/bin/
 
 ```
+</details>
 
-## direnv
+<details>
+<summary>direnv</summary>
 
 ### macOS
 
@@ -38,27 +44,30 @@ sudo mv terraform /usr/local/bin/
 ```bash
     sudo apt-get install direnv
 ```
+</details>
 
-## kubectl
+<details>
+<summary>kubectl</summary>
 
 ### macOS
 
 ```bash
-    brew install kubectl
-
+brew install kubectl
 ```
 
 ### Linux
 
 ```bash
-    curl -LO "https://dl.k8s.io/release/stable.txt"
+curl -LO "https://dl.k8s.io/release/stable.txt"
 VERSION=$(cat stable.txt)
 curl -LO <https://dl.k8s.io/${VERSION}/bin/linux/amd64/kubectl>
 chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 ```
+</details>
 
-## Helm
+<details>
+<summary>Helm</summary>
 
 ### macOS
 
@@ -73,6 +82,30 @@ sudo mv kubectl /usr/local/bin/
     tar -zxvf helm-v3.2.4-linux-amd64.tar.gz
     sudo mv linux-amd64/helm /usr/local/bin/
 ```
+</details>
+
+# Environment variables (.envrc.sample)
+
+```bash
+export TF_VAR_compartment_id=""
+export TF_VAR_user_ocid=""
+export TF_VAR_fingerprint=""
+export TF_VAR_private_key=""
+export TF_VAR_ssh_authorized_keys=""
+export TF_VAR_ssh_public_key=""
+export TF_VAR_image_ocid=""
+export TF_VAR_cluster_token=""
+export TF_VAR_region=""
+export TF_VAR_private_key_path=""
+export TF_VAR_tenancy_ocid=""
+export TF_VAR_compartment_ocid=""
+export TF_VAR_current_user_ocid=""
+export TF_VAR_region=""
+export TF_VAR_tenancy_ocid=""
+export TF_VAR_ssh_private_key_path=""
+export TF_VAR_ssh_private_key=""
+```
+
 
 # Visual Studio Code Configuration
 
@@ -93,3 +126,6 @@ Additionally, the following settings in Visual Studio Code should be configured:
       }
 
 ```
+
+
+# Review the .envrc.example file!
