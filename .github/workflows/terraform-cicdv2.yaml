@@ -140,7 +140,7 @@ jobs:
           TF_LOG: INFO
           DESTROY: ${{ github.event.inputs.destroy }}
         # Refresh the state before running the plan, to avoid errors.
-        if: env.DESTROY == 'false'
+        if: env.DESTROY != 'true'
         run: |
             terraform -chdir=./clusters/oci refresh -input=false && terraform -chdir=./clusters/oci plan -input=false -out=tfplan || \
               terraform -chdir=./clusters/oci plan -input=false -out=tfplan
