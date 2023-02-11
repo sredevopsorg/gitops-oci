@@ -1,6 +1,6 @@
-# NOT NO BE USED YET
+[![terraform-cluster-oci](https://github.com/sredevopsdev/gitops-oci/actions/workflows/terraform-cicdv2.yaml/badge.svg)](https://github.com/sredevopsdev/gitops-oci/actions/workflows/terraform-cicdv2.yaml)
 
-This setup is based on the following blog post: 
+# Testers required! 
 
 ## Requirements
 
