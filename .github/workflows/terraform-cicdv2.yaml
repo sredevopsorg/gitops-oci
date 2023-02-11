@@ -27,8 +27,8 @@ on:
 
 env:
   # Variables for global usage
-  environment: oci # Ambiente de ejecución
-  TF_VAR_environment: oci # Ambiente de ejecucion exclusivo para Terraform
+  # environment: oci # Ambiente de ejecución
+  # TF_VAR_environment: oci # Ambiente de ejecucion exclusivo para Terraform
   TF_VAR_compartment_id: ${{ secrets.OCI_COMPARTMENT_OCID }}
   TF_VAR_user_ocid: ${{ secrets.OCI_USER_OCID }}
   TF_VAR_fingerprint: ${{ secrets.OCI_FINGERPRINT }}
@@ -37,16 +37,13 @@ env:
   TF_VAR_region: ${{ secrets.OCI_REGION }}
   TF_VAR_tenancy_ocid: ${{ secrets.OCI_TENANCY_OCID }}
   TF_VAR_private_key: ${{ secrets.OCI_PRIVATE_KEY }}
-
-
-# variable "ssh_public_key" {} 
-# variable "image_ocid" {}
-# variable "ssh_private_key_path" {}
-# variable "ssh_private_key" {}
-# variable "cluster_token" {}
-# variable "compartment_ocid" {}
-# variable "current_user_ocid" {}
-# variable "private_key" {}
+  # TF_VAR_cluster_token: ${{ secrets.OCI_CLUSTER_TOKEN }}
+  TF_VAR_ssh_public_key: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
+  # TF_VAR_ssh_private_key_path: ${{ github.workspace }}/clusters/oci/oci_private_key.pem
+  # TF_VAR_ssh_private_key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+  # TF_VAR_image_ocid: ${{ secrets.OCI_IMAGE_OCID }}
+  TF_VAR_current_user_ocid: ${{ secrets.OCI_USER_OCID }}
+  TF_VAR_compartment_ocid: ${{ secrets.OCI_COMPARTMENT_OCID }}
 
 
 
@@ -61,22 +58,25 @@ jobs:
       pull-requests: write
 
 
-    defaults:
-      run:
-        # shell: bash
-        working-directory: clusters/oci
+    # defaults:
+    #   run:
+    #     # shell: bash
+    #     working-directory: clusters/oci
 
     steps:
       - uses: actions/checkout@v3
         name: get the latest code
         with:
           fetch-depth: 0
+          ref: main
+          persist-credentials: true
+
         id: checkout
 
       - name: dump files
         id: dump_files
         run: |
-          echo "${{ secrets.OCI_PRIVATE_KEY}}" | base64 -d > ${{ github.workspace }}/clusters/oci/oci_private_key.pem
+          echo "${{ secrets.OCI_PRIVATE_KEY }}" | base64 -d > ${{ github.workspace }}/clusters/oci/oci_private_key.pem
 
       - name: setup tf
         id: setup_terraform
@@ -96,16 +96,16 @@ jobs:
         # continue-on-error: false
         env:
           TF_LOG: INFO
-        run: terraform init
+        run: terraform -chdir=./clusters/oci init
 
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: terraform -chdir=./clusters/oci validate -no-color
         continue-on-error: true
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -input=false -out="oci.tfplan"
+        run: terraform -chdir=./clusters/oci plan -input=false -out=./oci.tfplan
         # continue-on-error: false
 
       # Now, only when we tag a commit, starting with "infra-v**", the apply command is triggered.
@@ -115,15 +115,13 @@ jobs:
         env:
           APPLY: ${{ github.event.inputs.apply }}
         if: env.APPLY == 'true'
-        run: terraform apply -auto-approve "oci.tfplan"
+        run:  terraform -chdir=./clusters/oci apply -auto-approve ./oci.tfplan
 
-      - name: save plan + tfstate
+# Save tfstate to github
+      - name: Save tfstate to github
+        id: save_tfstate
+        if: steps.apply.outcome == 'success'
         uses: actions/upload-artifact@v2
-        if: always()
-        continue-on-error: true
         with:
-          name: terraform-oci-plan
-          path: |
-            clusters/oci/oci.tfplan
-            clusters/oci/terraform.tfstate
-            clusters/oci/terraform.tfstate.backup
+          name: tfstate
+          path: clusters/oci/terraform.tfstate
