@@ -20,6 +20,17 @@ on:
         options:
           - 'true'
           - 'false'
+      destroy:
+        description: 'Run terraform destroy?'
+        required: false
+        type: choice
+        default: 'false'
+        options:
+          - 'false'
+          - 'false'
+          - 'false'
+          - 'false'
+          - 'true'
 
 
 
@@ -103,29 +114,44 @@ jobs:
         run: terraform -chdir=./clusters/oci validate -no-color
         continue-on-error: true
 
+      - name: Terraform Plan Destroy
+        id: plan-destroy
+        env:
+          TF_LOG: INFO
+          DESTROY: ${{ github.event.inputs.destroy }}
+        if: env.DESTROY == 'true' && github.actor == 'ngeorger'
+        # Refresh the state before running the plan, to avoid errors.
+        run: |
+            terraform -chdir=./clusters/oci refresh -input=false && terraform -chdir=./clusters/oci plan -destroy -input=false -out=tfplan || \
+              terraform -chdir=./clusters/oci plan -destroy -input=false -out=tfplan
+        # continue-on-error: false        
+
       - name: Terraform Plan
         id: plan
         env:
-          TF_LOG: DEBUG
+          TF_LOG: INFO
         # Refresh the state before running the plan, to avoid errors.
         run: |
             terraform -chdir=./clusters/oci refresh -input=false && terraform -chdir=./clusters/oci plan -input=false -out=tfplan || \
-              terraform -chdir=./clusters/oci plan -input=false -out=./oci.tfplan
+              terraform -chdir=./clusters/oci plan -input=false -out=tfplan
         # continue-on-error: false
 
       # Now, only when we tag a commit, starting with "infra-v**", the apply command is triggered.
-      - name: terraform-apply-oci
+      - name: terraform-apply
         id: apply
         # if: startsWith(github.ref, 'refs/tags/infra')
         env:
           APPLY: ${{ github.event.inputs.apply }}
-        if: env.APPLY == 'true'
+          DESTROY: ${{ github.event.inputs.destroy }}
+        # execute this step only if  environment variable DESTROY = true, or an env variable APPLY = true, and the actor is ngeorger.
+        if: env.DESTROY == 'true' && github.actor == 'ngeorger' || env.APPLY == 'true' && github.actor == 'ngeorger'
         run:  terraform -chdir=./clusters/oci apply -auto-approve tfplan
+      
 
 # Save tfstate to github
       - name: Save tfstate to github
         id: save_tfstate
-        if: steps.apply.outcome == 'success'
+        if: steps.apply.outcome == 'success' || steps.plan-destroy.outcome == 'success'
         uses: actions/upload-artifact@v2
         with:
           name: tfstate
