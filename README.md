@@ -1,6 +1,21 @@
 [![terraform-cluster-oci](https://github.com/sredevopsdev/gitops-oci/actions/workflows/terraform-cicdv2.yaml/badge.svg)](https://github.com/sredevopsdev/gitops-oci/actions/workflows/terraform-cicdv2.yaml)
 
-# Testers wanted!
+# Work in progress! 🚧
+
+## Testers, reviewers, enthusiasths wanted.
+
+## What's working:
+
+Terraform
+- OCI Infrastructure, always free resources.
+- Github Workflow and automation for CI with Terraform.
+- Very poor management of the state through artifacts
+
+## What's pending:
+
+- k3s deployment automation
+- k3s load balancer or ingress
+- flux bootstraping, all resources except base infra and k3s
 
 You'll need an [Oracle CLoud Account - Always Free Tier](https://www.oracle.com/cl/cloud/free/)
 
