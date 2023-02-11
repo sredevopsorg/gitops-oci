@@ -1,6 +1,5 @@
 terraform {
-  required_version = ">= 1.1.5"
-
+  required_version = ">= 0.13.0"
   required_providers {
     github = {
       source  = "integrations/github"
@@ -31,7 +30,7 @@ provider "flux" {}
 provider "kubectl" {}
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path = "./kubeconfig.yml"
 }
 
 provider "github" {
@@ -41,7 +40,7 @@ provider "github" {
 
 # SSH
 locals {
-  known_hosts = "github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg="
+  known_hosts = ""
   
 }
 
