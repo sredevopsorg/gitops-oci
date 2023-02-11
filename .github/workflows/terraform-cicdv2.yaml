@@ -37,11 +37,11 @@ env:
   TF_VAR_region: ${{ secrets.OCI_REGION }}
   TF_VAR_tenancy_ocid: ${{ secrets.OCI_TENANCY_OCID }}
   TF_VAR_private_key: ${{ secrets.OCI_PRIVATE_KEY }}
-  # TF_VAR_cluster_token: ${{ secrets.OCI_CLUSTER_TOKEN }}
-  TF_VAR_ssh_public_key: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
+  TF_VAR_cluster_token: ${{ secrets.OCI_CLUSTER_TOKEN }}
+  TF_VAR_ssh_public_key: '${{ secrets.OCI_SSH_PUBLIC_KEY }}'
   # TF_VAR_ssh_private_key_path: ${{ github.workspace }}/clusters/oci/oci_private_key.pem
-  # TF_VAR_ssh_private_key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
-  # TF_VAR_image_ocid: ${{ secrets.OCI_IMAGE_OCID }}
+  TF_VAR_ssh_private_key: '${{ secrets.OCI_SSH_PRIVATE_KEY }}'
+  TF_VAR_image_ocid: ${{ secrets.OCI_IMAGE_OCID }}
   TF_VAR_current_user_ocid: ${{ secrets.OCI_USER_OCID }}
   TF_VAR_compartment_ocid: ${{ secrets.OCI_COMPARTMENT_OCID }}
 
