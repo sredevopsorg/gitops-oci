@@ -54,11 +54,19 @@ resource "oci_core_instance" "generated_oci_core_instance" {
   is_pv_encryption_in_transit_enabled = "true"
   metadata = {
     "ssh_authorized_keys" = var.ssh_authorized_keys
+    "user_data" = base64encode(
+      templatefile("./k3s.sh",
+        {
+          token           = var.cluster_token
+      })
+    )
   }
+
   shape = "VM.Standard.A1.Flex"
   shape_config {
     memory_in_gbs = "12"
     ocpus         = "2"
+
   }
   source_details {
     boot_volume_size_in_gbs = "50"

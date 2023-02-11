@@ -1,13 +1,13 @@
 output "instance_ids" {
-  value = [for i in oci_core_instance.generated_oci_core_instance: i.id]
+  value = [for i in oci_core_instance.generated_oci_core_instance : i.id]
 }
 
 output "instance_private_ips" {
-  value = [for i in oci_core_instance.generated_oci_core_instance: i.private_ip]
+  value = [for i in oci_core_instance.generated_oci_core_instance : i.private_ip]
 }
 
 output "instance_public_ips" {
-  value = [for i in oci_core_instance.generated_oci_core_instance: i.public_ip]
+  value = [for i in oci_core_instance.generated_oci_core_instance : i.public_ip]
 }
 
 output "vcn_id" {

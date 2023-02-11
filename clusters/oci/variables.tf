@@ -15,7 +15,7 @@ variable "image_ocid" {}
 
 variable "ssh_private_key" {}
 
-/* variable "cluster_token" {} */
+variable "cluster_token" {}
 
 variable "compartment_ocid" {}
 

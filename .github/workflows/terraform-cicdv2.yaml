@@ -31,6 +31,14 @@ on:
           - 'false'
           - 'false'
           - 'true'
+      install-k3sup:
+        description: 'Install k3sup?'
+        required: false
+        type: choice
+        default: 'false'
+        options:
+          - 'true'
+          - 'false'
 
 
 
@@ -158,3 +166,33 @@ jobs:
         with:
           name: tfstate
           path: clusters/oci/terraform.tfstate
+
+#   install-k3sup:
+#     if: ${{ github.event.inputs.install-k3sup == 'true' }}
+#     runs-on: ubuntu-latest
+
+#     permissions:
+#       contents: write
+#       id-token: write
+#       pull-requests: write
+    
+
+#     steps:
+#       - uses: actions/checkout@v3
+#         name: get the latest code
+#         with:
+#           fetch-depth: 0
+#           ref: main
+#           persist-credentials: true
+
+#         id: checkout
+
+#       - name: dump files
+#         id: dump_files
+#         run: |
+#           echo "${{ secrets.OCI_PRIVATE_KEY }}" | base64 -d > ${{ github.workspace }}/clusters/oci/oci_private_key.pem
+
+# # Initiate ssh-agent
+#       - name: Initiate ssh-agent
+#         id: ssh-agent
+#         # 
