@@ -8,4 +8,19 @@ resource "oci_core_volume" "shared_50gb_oci_core_volume" {
   is_auto_tune_enabled = "false"
   size_in_gbs          = "50"
   vpus_per_gb          = "10"
+  # COnfigure the volume to be shared with other instances and mount it in the /mnt/shared folder
+  # This is a good practice to share data between instances
+  connection {
+    type = "paravirtualized"
+    shared = true
+    mount_point = "/mnt/shared"
+  }
+  lifecycle {
+    ignore_changes = [
+      size_in_gbs,
+      vpus_per_gb,
+      display_name,
+      availability_domain
+          ]
+  }
 }

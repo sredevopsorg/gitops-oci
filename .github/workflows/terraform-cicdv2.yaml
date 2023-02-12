@@ -70,6 +70,8 @@ jobs:
   terraform-oci-plan:
     runs-on: ubuntu-latest
     environment: oci
+    outputs:
+      infra_values: ${{ steps.apply.outputs }}
 
     permissions:
       contents: write
@@ -153,6 +155,7 @@ jobs:
         env:
           APPLY: ${{ github.event.inputs.apply }}
           DESTROY: ${{ github.event.inputs.destroy }}
+
         # execute this step only if  environment variable DESTROY = true, or an env variable APPLY = true, and the actor is ngeorger.
         if: env.DESTROY == 'true' && github.actor == 'ngeorger' || env.APPLY == 'true' && github.actor == 'ngeorger'
         run:  terraform -chdir=./clusters/oci apply -auto-approve tfplan
@@ -162,35 +165,44 @@ jobs:
       - name: Save tfstate to github
         id: save_tfstate
         if: steps.apply.outcome == 'success' || steps.plan-destroy.outcome == 'success'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: tfstate
+          name: terraform.tfstate
           path: clusters/oci/terraform.tfstate
 
-#   install-k3sup:
-#     if: ${{ github.event.inputs.install-k3sup == 'true' }}
-#     runs-on: ubuntu-latest
+  install-k3sup:
+    if: ${{ github.event.inputs.install-k3sup == 'true' }} || ${{ github.
+    runs-on: ubuntu-latest
 
-#     permissions:
-#       contents: write
-#       id-token: write
-#       pull-requests: write
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
     
 
-#     steps:
-#       - uses: actions/checkout@v3
-#         name: get the latest code
-#         with:
-#           fetch-depth: 0
-#           ref: main
-#           persist-credentials: true
+    steps:
+      - uses: actions/checkout@v3
+        name: get the latest code
+        with:
+          fetch-depth: 0
+          ref: main
+          persist-credentials: true
+        id: checkout
 
-#         id: checkout
+      - name: dump files
+        id: dump_files
+        run: |
+          mkdir -pv ${{ github.workspace }}/.ssh
+          echo "${{ secrets.OCI_SSH_PRIVATE_KEY }}" > ${{ github.workspace }}/.ssh/id_rsa
+          chmod 600 ${{ github.workspace }}/.ssh/id_rsa
 
-#       - name: dump files
-#         id: dump_files
-#         run: |
-#           echo "${{ secrets.OCI_PRIVATE_KEY }}" | base64 -d > ${{ github.workspace }}/clusters/oci/oci_private_key.pem
+      - name: Install k3sup
+        id: install_k3sup
+        run: |
+          curl -sLS https://get.k3sup.dev | sh
+          sudo mv k3sup /usr/local/bin/
+          k3sup || true
+        
 
 # # Initiate ssh-agent
 #       - name: Initiate ssh-agent

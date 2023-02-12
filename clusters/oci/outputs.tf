@@ -21,3 +21,11 @@ output "subnet_id" {
 output "internet_gateway_id" {
   value = oci_core_internet_gateway.generated_oci_core_internet_gateway.id
 }
+
+output "fqdn0" {
+  value = oci_core_instance.generated_oci_core_instance[0]
+}
+
+output "fqdn1" {
+  value = oci_core_instance.generated_oci_core_instance[1]
+}

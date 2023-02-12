@@ -1,0 +1,14 @@
+languageCode = 'es-cl'
+title = 'Docs for OCI Infra Gitops'
+theme = 'dot'
+[markup.goldmark.renderer]
+    unsafe = true
+# customize color
+[params]
+    primary_color = "#111"
+    body_color = "#111"
+    text_color = "#999"
+    text_color_dark = "#fff"
+    white_color = "#fff"
+    light_color = "#eee"
+    logo = "https://sredevops.dev/logo-h.png"
