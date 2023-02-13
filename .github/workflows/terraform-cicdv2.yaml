@@ -171,7 +171,8 @@ jobs:
           path: clusters/oci/terraform.tfstate
 
   install-k3sup:
-    if: ${{ github.event.inputs.install-k3sup == 'true' }} || ${{ github.
+    needs: terraform-oci-plan
+    if: needs.terraform-oci-plan.outputs.infra_values != ''
     runs-on: ubuntu-latest
 
     permissions:
@@ -191,6 +192,7 @@ jobs:
 
       - name: dump files
         id: dump_files
+        continue-on-error: true
         run: |
           mkdir -pv ${{ github.workspace }}/.ssh
           echo "${{ secrets.OCI_SSH_PRIVATE_KEY }}" > ${{ github.workspace }}/.ssh/id_rsa
@@ -198,13 +200,25 @@ jobs:
 
       - name: Install k3sup
         id: install_k3sup
+        continue-on-error: true
         run: |
           curl -sLS https://get.k3sup.dev | sh
           sudo mv k3sup /usr/local/bin/
           k3sup || true
-        
+      
+      - uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
+      
+      - name: execute k3sup
+        run: |
+          k3sup install --ip ${{ needs.terraform-oci-plan.outputs.infra_values }} --user opc --ssh-key ${{ github.workspace }}/.ssh/id_rsa --local-path ${{ github.workspace }}/clusters/oci/kubeconfig.yaml --merge --context k3s-oci
+        continue-on-error: true
 
-# # Initiate ssh-agent
-#       - name: Initiate ssh-agent
-#         id: ssh-agent
-#         # 
+      - name: Save kubeconfig to github
+        id: save_kubeconfig
+        uses: actions/upload-artifact@v3
+        with:
+          name: kubeconfig.yaml
+          path: clusters/oci/kubeconfig.yaml
+        continue-on-error: true
