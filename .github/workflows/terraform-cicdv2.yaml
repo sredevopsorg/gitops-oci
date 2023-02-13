@@ -177,7 +177,7 @@ jobs:
     needs: terraform-oci-plan
     env:
       INSTALL_K3SUP: ${{ github.event.inputs.install-k3sup }}
-    if: env.INSTALL_K3SUP == 'true'  
+    if: ${{ env.INSTALL_K3SUP }} == 'true'  
     # if: ${{ needs.terraform-oci-plan.outputs.ip_0 != '' }} || ${{ github.event.inputs.install_k3sup }} == 'true'
     runs-on: ubuntu-latest
 
