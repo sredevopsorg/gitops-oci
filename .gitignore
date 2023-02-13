@@ -126,3 +126,4 @@ terraform.rc
 !clusters/oci/terraform.tfstate.backup
 # !clusters/oci/oci-free.tfplan
 kubeconf.yml
+clusters/oci/tests.sh
