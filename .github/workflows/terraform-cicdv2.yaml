@@ -65,13 +65,12 @@ env:
   TF_VAR_compartment_ocid: ${{ secrets.OCI_COMPARTMENT_OCID }}
 
 
-
 jobs:
   terraform-oci-plan:
     runs-on: ubuntu-latest
     environment: oci
     outputs:
-      infra_values: ${{ steps.apply.outputs }}
+      ip_0: ${{ steps.apply.outputs.apply }}
 
     permissions:
       contents: write
@@ -102,7 +101,8 @@ jobs:
       - name: setup tf
         id: setup_terraform
         uses: hashicorp/setup-terraform@v2
-        # with:
+        with:
+          terraform_wrapper: false
         #   terraform_version:
 
 
@@ -158,8 +158,11 @@ jobs:
 
         # execute this step only if  environment variable DESTROY = true, or an env variable APPLY = true, and the actor is ngeorger.
         if: env.DESTROY == 'true' && github.actor == 'ngeorger' || env.APPLY == 'true' && github.actor == 'ngeorger'
-        run:  terraform -chdir=./clusters/oci apply -auto-approve tfplan
-      
+        run: |
+          terraform -chdir=./clusters/oci apply -auto-approve tfplan
+          echo IP_0=$(terraform -chdir=./clusters/oci output ip_public_0) >> $GITHUB_OUTPUTS
+        # continue-on-error: false    
+          
 
 # Save tfstate to github
       - name: Save tfstate to github
@@ -172,7 +175,10 @@ jobs:
 
   install-k3sup:
     needs: terraform-oci-plan
-    if: needs.terraform-oci-plan.outputs.infra_values != ''
+    env:
+      INSTALL_K3SUP: ${{ github.event.inputs.install-k3sup }}
+    if: env.INSTALL_K3SUP == 'true'  
+    # if: ${{ needs.terraform-oci-plan.outputs.ip_0 != '' }} || ${{ github.event.inputs.install_k3sup }} == 'true'
     runs-on: ubuntu-latest
 
     permissions:
@@ -180,18 +186,18 @@ jobs:
       id-token: write
       pull-requests: write
     
-
+  
     steps:
-      - uses: actions/checkout@v3
-        name: get the latest code
-        with:
-          fetch-depth: 0
-          ref: main
-          persist-credentials: true
-        id: checkout
+    #   - uses: actions/checkout@v3
+    #     name: get the latest code
+    #     with:
+    #       fetch-depth: 0
+    #       ref: main
+    #       persist-credentials: true
+    #     id: checkout
 
       - name: dump files
-        id: dump_files
+        id: dump_files2
         continue-on-error: true
         run: |
           mkdir -pv ${{ github.workspace }}/.ssh
@@ -211,8 +217,10 @@ jobs:
           ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
       
       - name: execute k3sup
+        env:
+          IP_ADDRESS: ${{ needs.terraform-oci-plan.outputs.ip_0 }}
         run: |
-          k3sup install --ip ${{ needs.terraform-oci-plan.outputs.infra_values }} --user opc --ssh-key ${{ github.workspace }}/.ssh/id_rsa --local-path ${{ github.workspace }}/clusters/oci/kubeconfig.yaml --merge --context k3s-oci
+          k3sup install --ip ${{ env.IP_ADDRESS }}  --user ubuntu --ssh-key ${{ github.workspace }}/.ssh/id_rsa --local-path ${{ github.workspace }}/clusters/oci/kubeconfig.yaml --merge --context k3s-oci --cluster 
         continue-on-error: true
 
       - name: Save kubeconfig to github

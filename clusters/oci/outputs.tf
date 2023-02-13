@@ -10,6 +10,10 @@ output "instance_public_ips" {
   value = [for i in oci_core_instance.generated_oci_core_instance : i.public_ip]
 }
 
+output "ip_public_0" {
+  value = oci_core_instance.generated_oci_core_instance[0].public_ip 
+}
+
 output "vcn_id" {
   value = oci_core_vcn.generated_oci_core_vcn.id
 }
