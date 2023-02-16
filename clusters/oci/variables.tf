@@ -22,3 +22,13 @@ variable "compartment_ocid" {}
 variable "current_user_ocid" {}
 
 variable "private_key" {}
+
+
+
+variable "vcn_cidr" {
+  type = string
+}
+
+variable "private_subnet_cidr" {
+  type = string
+}
