@@ -23,7 +23,7 @@ variable "current_user_ocid" {}
 
 variable "private_key" {}
 
-
+/* 
 
 variable "vcn_cidr" {
   type = string
@@ -31,4 +31,4 @@ variable "vcn_cidr" {
 
 variable "private_subnet_cidr" {
   type = string
-}
+} */
