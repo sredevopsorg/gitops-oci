@@ -129,3 +129,4 @@ kubeconf.yml
 clusters/oci/tests.sh
 kubeconfig
 current/
+clusters/oci/lb.tf
