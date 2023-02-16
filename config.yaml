@@ -98,16 +98,18 @@
 #    --prefer-bundled-bin                       (experimental) Prefer bundled userspace binaries over host binaries
 #    --selinux                                  (agent/node) Enable SELinux in containerd [$K3S_SELINUX]
 #    --lb-server-port value                     (agent/node) Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer. (default: 6444) [$K3S_LB_SERVER_PORT]
-# 
-        # --node-ip=10.0.10.250 \
-        # --node-name=gitops-oci-0 \
-        # --advertise-address=10.0.10.250 \
-        # --tls-san="'oci.sredevops.dev,gitops-oci-0','10.0.10.250','gitops-oci-0.subnet02072354.vcn02072354.oraclevcn.com','*.sredevops.cl'" \
-        # --token='_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
-        # --agent-token='_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
-        # --https-listen-port=6443 --default-local-storage-path=/home/blockstorage \
-        # --cluster-init 
-        # Use the above options as parameters to the k3s server config yaml file.
+# # 
+# ExecStart=/usr/local/bin/k3s \
+#     server \
+#         --node-name=gitops-oci-0 \
+#         --node-ip=10.0.10.250 \
+#         --advertise-address=10.0.10.250 \
+#         --node-external-ip=144.22.47.72 \
+#         --tls-san="oci.sredevops.dev,'*.sredevops.dev',.sredevops.cl,gitops-oci-0.subnet02072354.vcn02072354.oraclevcn.com,10.0.10.250,'*.sredevops.cl'" \
+#         --token='_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
+#         --agent-token='_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
+#         --https-listen-port=6443 --default-local-storage-path=/home/blockstorage \
+#         --cluster-init
 
 # node-name: gitops-oci-0
 # advertise-address: '10.0.10.250'
