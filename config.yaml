@@ -99,28 +99,32 @@
 #    --selinux                                  (agent/node) Enable SELinux in containerd [$K3S_SELINUX]
 #    --lb-server-port value                     (agent/node) Local port for supervisor client load-balancer. If the supervisor and apiserver are not colocated an additional port 1 less than this port will also be used for the apiserver client load-balancer. (default: 6444) [$K3S_LB_SERVER_PORT]
 # # 
-ExecStart=/usr/local/bin/k3s \
-    server --node-external-ip="144.22.37.50" --tls-san="oci.sredevops.dev,'*.sredevops.dev','.sredevops.cl','sredevops0.sub02160843290.vcnsredevopsroo.oraclevcn.com','10.0.0.250','*.sredevops.cl','oci.sredevops.cl'" --node-ip="10.0.0.250" \
-        '--node-ip' \
-        '10.0.0.250' \
-        '--tls-san' \
-        '144.22.53.15,oci.sredevops.cl' \
-        '--node-external-ip' \
-        '144.22.53.15' \
-        '--token' \
-        '_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
-        '--agent-token' \
-        '_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
-        '--https-listen-port' \
-        '6443' \
-        '--cluster-init'
+# ExecStart=/usr/local/bin/k3s \
+#     server --node-external-ip="144.22.37.50" --tls-san="oci.sredevops.dev,'*.sredevops.dev','.sredevops.cl','sredevops0.sub02160843290.vcnsredevopsroo.oraclevcn.com','10.0.0.250','*.sredevops.cl','oci.sredevops.cl'" --node-ip="10.0.0.250" \
+        # '--node-ip' \
+        # '10.0.0.250' \
+        # '--tls-san' \
+        # '144.22.53.15,oci.sredevops.cl,10.0.0.250' \
+        # '--advertise-address' \
+        # '10.0.0.250' \
+        # '--node-external-ip' \
+        # '144.22.53.15' \
+        # '--token' \
+        # '_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
+        # '--agent-token' \
+        # '_QY~zfZWWR:bx/U9b20DHRn/AJEF4zyEJjiNtC~eDOi.dWcs' \
+        # '--https-listen-port' \
+        # '6443' \
+        # '--default-local-storage-path' \
+        # '/mnt/50gb' \
+        # '--cluster-init' 
         
         
-        iptables -I FORWARD 15 -s 10.0.0.0/8 -j ACCEPT
-iptables -I FORWARD 16 -d 10.0.0.0/8 -j ACCEPT
+#         iptables -I FORWARD 15 -s 10.0.0.0/8 -j ACCEPT
+# iptables -I FORWARD 16 -d 10.0.0.0/8 -j ACCEPT
 
-iptables -I INPUT 18 -s 10.0.0.0/8 -j ACCEPT
-iptables -I INPUT 19 -d 10.0.0.0/8 -j ACCEPT
+# iptables -I INPUT 18 -s 10.0.0.0/8 -j ACCEPT
+# iptables -I INPUT 19 -d 10.0.0.0/8 -j ACCEPT
 # node-name: sredevops0
 # advertise-address: '10.0.0.250'
 # tls-san: ["sredevops0", "*.sredevops.dev", "sredevops0.subnet02072354.vcn02072354.oraclevcn.com", "oci.sredevops.dev"]
