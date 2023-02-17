@@ -107,6 +107,7 @@
         # '144.22.53.15,oci.sredevops.cl,10.0.0.250' \
         # '--advertise-address' \
         # '10.0.0.250' \
+
         # '--node-external-ip' \
         # '144.22.53.15' \
         # '--token' \
