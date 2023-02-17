@@ -31,7 +31,7 @@ on:
           - 'false'
           - 'false'
           - 'true'
-      install-k3sup:
+      k3sup:
         description: 'Install k3sup?'
         required: false
         type: choice
@@ -175,9 +175,7 @@ jobs:
 
   install-k3sup:
     # needs: terraform-oci-plan
-    env:
-      INSTALL_K3SUP: ${{ github.event.inputs.destroy }}
-    if: ${{ env.INSTALL_K3SUP }} == 'true'  
+    if: github.event.inputs.k3sup == 'true' && github.actor == 'ngeorger'
     # if: ${{ needs.terraform-oci-plan.outputs.ip_0 != '' }} 
     runs-on: ubuntu-latest
 
