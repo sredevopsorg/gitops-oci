@@ -21,7 +21,7 @@ resource "oci_core_instance" "generated_oci_core_instance" {
     is_management_disabled = "false"
     is_monitoring_disabled = "false"
     plugins_config {
-      desired_state = "ENABLED"
+      desired_state = "DISABLED"
       name          = "Vulnerability Scanning"
     }
     plugins_config {
@@ -29,7 +29,7 @@ resource "oci_core_instance" "generated_oci_core_instance" {
       name          = "Compute Instance Monitoring"
     }
     plugins_config {
-      desired_state = "ENABLED"
+      desired_state = "DISABLED"
       name          = "Bastion"
     }
   }
