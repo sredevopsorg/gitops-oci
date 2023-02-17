@@ -129,3 +129,12 @@
 # node-name: sredevops0
 # advertise-address: '10.0.0.250'
 # tls-san: ["sredevops0", "*.sredevops.dev", "sredevops0.subnet02072354.vcn02072354.oraclevcn.com", "oci.sredevops.dev"]
+
+
+
+
+
+
+secrets+
+
+kubectl create secret generic default-cloudflare-tls -n kube-system --from-file=tls.crt=/Users/ngeorger/sredevops/certs-creds/sredevops.cl.pem --from-file=tls.key=/Users/ngeorger/sredevops/certs-creds/sredevops.cl.key
