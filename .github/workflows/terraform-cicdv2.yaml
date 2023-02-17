@@ -176,7 +176,7 @@ jobs:
   install-k3sup:
     # needs: terraform-oci-plan
     env:
-      INSTALL_K3SUP: ${{ github.event.inputs.install-k3sup }}  
+      INSTALL_K3SUP: ${{ github.event.inputs.destroy }}
     if: ${{ env.INSTALL_K3SUP }} == 'true'  
     # if: ${{ needs.terraform-oci-plan.outputs.ip_0 != '' }} 
     runs-on: ubuntu-latest
@@ -218,7 +218,7 @@ jobs:
       
       - name: execute k3sup
         env:
-          IP_ADDRESS: ${{ needs.terraform-oci-plan.outputs.ip_0 }} || ${{ secrets.OCI_IP_ADDRESS }}
+          IP_ADDRESS: ${{ secrets.OCI_IP_ADDRESS }}
         run: |
           k3sup install --ip ${{ env.IP_ADDRESS }}  --user ubuntu --ssh-key ${{ github.workspace }}/.ssh/id_rsa --local-path ${{ github.workspace }}/clusters/oci/kubeconfig.yaml --merge --context k3s-oci --cluster 
         continue-on-error: true
