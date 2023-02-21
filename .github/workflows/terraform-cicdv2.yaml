@@ -31,16 +31,6 @@ on:
           - 'false'
           - 'false'
           - 'true'
-      k3sup:
-        description: 'Install k3sup?'
-        required: false
-        type: choice
-        default: 'false'
-        options:
-          - 'true'
-          - 'false'
-
-
 
 # ToDo: Matrix conditional scenarios for each environment.
 
@@ -129,7 +119,7 @@ jobs:
         env:
           TF_LOG: INFO
           DESTROY: ${{ github.event.inputs.destroy }}
-        if: env.DESTROY == 'true' && github.actor == 'ngeorger'
+        if: env.DESTROY == 'true' 
         # Refresh the state before running the plan, to avoid errors.
         run: |
             terraform -chdir=./clusters/oci refresh -input=false && terraform -chdir=./clusters/oci plan -destroy -input=false -out=tfplan || \
@@ -157,7 +147,7 @@ jobs:
           DESTROY: ${{ github.event.inputs.destroy }}
 
         # execute this step only if  environment variable DESTROY = true, or an env variable APPLY = true, and the actor is ngeorger.
-        if: env.DESTROY == 'true' && github.actor == 'ngeorger' || env.APPLY == 'true' && github.actor == 'ngeorger'
+        if: env.DESTROY == 'true' || env.APPLY == 'true' 
         run: |
           terraform -chdir=./clusters/oci apply -auto-approve tfplan
           echo IP_0=$(terraform -chdir=./clusters/oci output ip_public_0) >> $GITHUB_OUTPUTS
@@ -172,51 +162,3 @@ jobs:
         with:
           name: terraform.tfstate
           path: clusters/oci/terraform.tfstate
-
-  install-k3sup:
-    # needs: terraform-oci-plan
-    if: github.event.inputs.k3sup == 'true' && github.actor == 'ngeorger'
-    # if: ${{ needs.terraform-oci-plan.outputs.ip_0 != '' }} 
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      id-token: write
-      pull-requests: write
-    
-  
-    steps:
-      - name: dump files
-        id: dump_files2
-        continue-on-error: true
-        run: |
-          mkdir -pv ${{ github.workspace }}/.ssh
-          echo "${{ secrets.OCI_SSH_PRIVATE_KEY }}" > ${{ github.workspace }}/.ssh/id_rsa
-          chmod 600 ${{ github.workspace }}/.ssh/id_rsa
-
-      - name: Install k3sup
-        id: install_k3sup
-        continue-on-error: true
-        run: |
-          curl -sLS https://get.k3sup.dev | sh
-          sudo mv k3sup /usr/local/bin/
-          k3sup || true
-      
-      - uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.OCI_SSH_PRIVATE_KEY }}
-      
-      - name: execute k3sup
-        env:
-          IP_ADDRESS: ${{ secrets.OCI_IP_ADDRESS }}
-        run: |
-          k3sup install --ip ${{ env.IP_ADDRESS }}  --user ubuntu --ssh-key ${{ github.workspace }}/.ssh/id_rsa --cluster  --local-path clusters/oci/kubeconfig.yaml 
-        continue-on-error: true
-
-      - name: Save kubeconfig to github
-        id: save_kubeconfig
-        uses: actions/upload-artifact@v3
-        with:
-          name: kubeconfig.yaml
-          path: clusters/oci/kubeconfig.yaml
-        continue-on-error: true
