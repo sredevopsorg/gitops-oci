@@ -1,4 +1,4 @@
-name: terraform-cluster-oci
+name: install_k3sup
 on:
   workflow_dispatch:
     inputs:
