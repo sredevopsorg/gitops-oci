@@ -56,7 +56,7 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -pv ${{ github.workspace }}/.ssh
-          echo "${{ secrets.OCI_SSH_PRIVATE_KEY }}" > ${{ github.workspace }}/.ssh/id_rsa
+          echo "${{ secrets.OCI_SSH_PRIVATE_KEY }}" | base64 -d > ${{ github.workspace }}/.ssh/id_rsa
 
       - name: Install k3sup
         id: install_k3sup
