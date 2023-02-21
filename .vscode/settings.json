@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": {
+    "kubernetes://schema/v1@secret+cert-manager.io/v1@issuer+cert-manager.io/v1@certificate+networking.k8s.io/v1@ingress": "file:///Users/ngeorger/sredevops/gitops-oci/deployments/services/cert-manager-cloudflare.yaml"
+  }
+}
